@@ -1,0 +1,135 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AlertTestActivity" >
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/start_button"
+        android:textColor="@android:color/white" />
+    
+    <Button
+        android:id="@+id/reset_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="66dp"
+        android:layout_toRightOf="@+id/start_button"
+        android:text="@string/reset_button"
+        android:textColor="@android:color/white" />
+    
+    <TextView
+        android:id="@+id/alert_dynamic_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/wrong_static_text"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="27dp"
+        android:text="@string/alert"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white" />
+    
+    <TableLayout
+        android:id="@+id/main_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/start_button"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/top_left_button"
+                android:layout_width="0dp"
+                android:layout_height="75dp"
+                android:layout_weight="0.5"
+                android:background="@color/red" />
+
+            <Button
+                android:id="@+id/top_right_button"
+                android:layout_width="0dp"
+                android:layout_height="75dp"
+                android:layout_weight="0.5"
+                android:background="@color/blue" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/bottom_left_button"
+                android:layout_width="0dp"
+                android:layout_height="75dp"
+                android:layout_weight="0.5"
+                android:background="@color/green" />
+
+            <Button
+                android:id="@+id/bottom_right_button"
+                android:layout_width="0dp"
+                android:layout_height="75dp"
+                android:layout_weight="0.5"
+                android:background="@color/pink" />
+        </TableRow>
+    </TableLayout>
+    
+    <TextView
+        android:id="@+id/correct_static_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/correct_static"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:typeface="monospace" />
+
+    <TextView
+        android:id="@+id/wrong_static_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/correct_static_text"
+        android:layout_alignBottom="@+id/correct_static_text"
+        android:layout_toRightOf="@+id/reset_button"
+        android:text="@string/wrong_static"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:typeface="monospace" />
+
+    <TextView
+        android:id="@+id/correct_dynamic_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/correct_static_text"
+        android:layout_alignBottom="@+id/correct_static_text"
+        android:layout_toRightOf="@+id/correct_static_text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:typeface="monospace" />
+
+    <TextView
+        android:id="@+id/wrong_dynamic_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/wrong_static_text"
+        android:layout_alignBottom="@+id/wrong_static_text"
+        android:layout_toRightOf="@+id/wrong_static_text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:typeface="monospace" />
+
+</RelativeLayout>
