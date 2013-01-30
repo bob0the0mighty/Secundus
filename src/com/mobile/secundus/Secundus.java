@@ -3,34 +3,45 @@ package com.mobile.secundus;
 import java.util.Random;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class AlertTestActivity extends Activity {
+public class Secundus extends Activity {
 
-	private final int				NUMBER_ROUNDS					= 10;
-	private final Double		WORST									= 0.4;
-	private final Double		WORSE									= 0.6;
-	private final Double		BAD										= 0.8;
-	private final Random		RNG										= new Random();
-	private final String		CORRECT_COLOR_STRING	= "CORRECT_COLOR_STRING";
-	private final String		GUESS_COUNT_INTARRAY	= "GUESS_COUNT_INTARRAY";
-	private final String[]	colors 								= { "red", "blue", "green", "pink" };
-	private int							correctSelections, wrongSelections;
-	private int[]						fromSavedState;
-	private Button					startButton, resetButton, topLeft, topRight,
-													bottomLeft, bottomRight;
-	private TextView				alert, correct, wrong;
-	private String					correctColor;
+	private final int					MENU_SETTINGS					= 0;
+	private final Double			WORST									= 0.4;
+	private final Double			WORSE									= 0.6;
+	private final Double			BAD										= 0.8;
+	private final Random			RNG										= new Random();
+	private final String			CORRECT_COLOR_STRING	= "CORRECT_COLOR_STRING";
+	private final String			GUESS_COUNT_INTARRAY	= "GUESS_COUNT_INTARRAY";
+	private final String[]		colors 								= { "red", "blue", "green", "pink" };
+	private int								number_rounds					= 10;
+	private int								correctSelections, wrongSelections;
+	private int[]							fromSavedState;
+	private Button						startButton, resetButton, topLeft, topRight,
+														bottomLeft, bottomRight;
+	private TextView					alert, correct, wrong;
+	private String						correctColor;
+	private SharedPreferences prefs;
 	
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		setContentView( R.layout.main );
+		
+		prefs = getPreferences( MODE_PRIVATE );
+		if( prefs.contains( PreferenceScreen.ANSWERS ) ) { //not sure that the if is strictly necessary.  
+			number_rounds = Integer.parseInt( prefs.getString( PreferenceScreen.ANSWERS , PreferenceScreen.DEFAULT ) );
+		}
+		
 		//First branch if the game state was saved due to orientation change, home button press, etc...
 		if( savedInstanceState != null && savedInstanceState.containsKey( CORRECT_COLOR_STRING ) ){
 			correctColor 			= savedInstanceState.getString( CORRECT_COLOR_STRING );
@@ -46,7 +57,7 @@ public class AlertTestActivity extends Activity {
 	}
 	
 	/*
-	 * Ensures game state propigation when program re-ups for various
+	 * Ensures game state propagation when program re-ups for various
 	 * reasons.  The correct color and current score are the important pieces.
 	 * (non-Javadoc)
 	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
@@ -59,17 +70,31 @@ public class AlertTestActivity extends Activity {
 	}
 
 	/*
-	 * Shows no option menu
+	 * Populates Options menu.
+	 * Just settings for now
 	 * (non-Javadoc)
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
 	@Override
 	public boolean onCreateOptionsMenu( Menu menu ) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate( R.menu.activity_alert_test, menu );
-		return false;
+		MenuItem item = menu.add(Menu.NONE, MENU_SETTINGS, 0, R.string.menu_item_settings);
+		item.setIcon(android.R.drawable.ic_menu_preferences);
+		return true;
 	}
 	
+	/*
+	 * Handles menu item selection.
+	 * Currently launches settings activity.
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onMenuItemSelected(int, android.view.MenuItem)
+	 */
+	@Override
+  public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		startActivity(new Intent(this, PreferenceScreen.class));
+		return true; 
+	}
+
 	/*
 	 * Main logic entrance
 	 */
@@ -159,6 +184,12 @@ public class AlertTestActivity extends Activity {
 	 */
 	private void reset() {
 		correctColor = null;
+		
+		int temp = Integer.parseInt( prefs.getString( PreferenceScreen.ANSWERS , "10" ) );
+		if( 0 < temp && temp <= Integer.MAX_VALUE ){
+			number_rounds = temp;
+		}
+		
 		correctSelections = 0;
 		wrongSelections = 0;
 		startButton.setClickable( true );
@@ -175,7 +206,7 @@ public class AlertTestActivity extends Activity {
 		wrong.setText( "" + wrongSelections );
 		if ( correctColor == null && ( correctSelections + wrongSelections ) == 0 ) {
 			alert.setText( "" );
-		} else if ( ( correctSelections + wrongSelections ) >= NUMBER_ROUNDS) {
+		} else if ( ( correctSelections + wrongSelections ) >= number_rounds) {
 			turnOffStartButton();
 			evaluateUser();
 			startButton.setText( R.string.start_button_finished );
@@ -201,13 +232,13 @@ public class AlertTestActivity extends Activity {
 	 * changes to NUMBER_ROUNDS
 	 */
 	private void evaluateUser() {
-		if ( correctSelections < NUMBER_ROUNDS * WORST ) {
+		if ( correctSelections < number_rounds * WORST ) {
 			alert.setText( R.string.dont_walk);
-		} else if ( correctSelections < NUMBER_ROUNDS * WORSE ) {
+		} else if ( correctSelections < number_rounds * WORSE ) {
 			alert.setText( R.string.dont_drive);
-		} else if ( correctSelections < NUMBER_ROUNDS * BAD ) {
+		} else if ( correctSelections < number_rounds * BAD ) {
 			alert.setText( R.string.pay_attention);
-		} else if ( correctSelections < NUMBER_ROUNDS ) {
+		} else if ( correctSelections < number_rounds ) {
 			alert.setText( R.string.ok);
 		} else {
 			alert.setText( R.string.perfect);
@@ -238,5 +269,5 @@ public class AlertTestActivity extends Activity {
 			selectNewColor();
 			updateText();
 		}
-	}
+	}	
 }
